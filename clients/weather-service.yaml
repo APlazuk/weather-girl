@@ -1,0 +1,35 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: http://localhost:8080
+  description: Generated server url
+paths:
+  /location/coordinates:
+    get:
+      tags:
+      - location-controller
+      operationId: getLocationCoordinates
+      parameters:
+      - name: city
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Coordinates"
+components:
+  schemas:
+    Coordinates:
+      type: object
+      properties:
+        lat:
+          type: string
+        lon:
+          type: string
