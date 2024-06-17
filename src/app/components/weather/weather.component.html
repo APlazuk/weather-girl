@@ -1,0 +1,12 @@
+<p>weather works!</p>
+
+<div><p>Podaj nazwę miasta</p>
+<input type="text" [(ngModel)]="city" (keyup.enter)="onEnter(city)">
+<p>Wartość zmiennej: {{ providedCity }}</p>
+
+<p>lat: {{ coordinate.lat }}</p>
+<p>lon: {{ coordinate.lng }}</p>
+
+  <app-map>{{coordinate}}</app-map>
+</div>
+
