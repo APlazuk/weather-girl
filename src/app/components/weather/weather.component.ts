@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Coordinates, LocationControllerService} from "../../openapi";
 import {FormsModule} from "@angular/forms";
 import {MapComponent} from "../map/map.component";
+import {WeatherService} from "../../service/weather.service";
 
 
 @Component({
@@ -18,14 +19,14 @@ export class WeatherComponent implements OnInit {
 
   city = '';
   providedCity = '';
-  coordinate: Coordinates = {};
+  coordinates: Coordinates = {};
 
-  //zrobic tutorial dla maxboxa
-  //https://medium.com/@gisjohnecs/creating-a-simple-mapbox-component-in-angular-b25aeec706c
-  constructor(private locationControllerService: LocationControllerService) {
+  constructor(private locationControllerService: LocationControllerService,
+              private weatherService: WeatherService) {
   }
 
   ngOnInit(): void {
+    this.updateCoordinates();
   }
 
   onEnter(value: string): void {
@@ -36,9 +37,21 @@ export class WeatherComponent implements OnInit {
   public getLocationCoordinates(city: string): void {
     this.locationControllerService.getLocationCoordinates(city).subscribe(
       {
-        next: response => this.coordinate = response,
+        next: response => this.coordinates = response,
+        complete: () => this.changeCoordinates(),
         error: (error) => console.log(error)
       }
     );
+  }
+
+  changeCoordinates(): void {
+    this.weatherService.changeCoordinates(this.coordinates);
+    console.log("Coordinates has been changed:" + this.coordinates.lng?.toString(), this.coordinates.lat?.toString());
+  }
+
+  updateCoordinates() {
+    this.weatherService.currentCoordinates
+      .subscribe(coordinate => this.coordinates = coordinate);
+    console.log("Coordinates has been updated:" + this.coordinates);
   }
 }

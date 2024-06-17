@@ -4,9 +4,7 @@
 <input type="text" [(ngModel)]="city" (keyup.enter)="onEnter(city)">
 <p>Wartość zmiennej: {{ providedCity }}</p>
 
-<p>lat: {{ coordinate.lat }}</p>
-<p>lon: {{ coordinate.lng }}</p>
-
-  <app-map>{{coordinate}}</app-map>
+<p>lat: {{ coordinates.lat }}</p>
+<p>lon: {{ coordinates.lng }}</p>
 </div>
 
