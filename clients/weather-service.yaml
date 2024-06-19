@@ -6,6 +6,30 @@ servers:
 - url: http://localhost:8080
   description: Generated server url
 paths:
+  /weather-nowcast:
+    post:
+      tags:
+      - location-controller
+      operationId: getWeatherNowcast
+      parameters:
+      - name: mapZoom
+        in: query
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Coordinates"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WeatherNowcast"
   /location/coordinates:
     get:
       tags:
@@ -35,3 +59,20 @@ components:
         lng:
           type: number
           format: double
+    Nowcast:
+      type: object
+      properties:
+        time:
+          type: integer
+          format: int32
+        path:
+          type: string
+    WeatherNowcast:
+      type: object
+      properties:
+        host:
+          type: string
+        nowcast:
+          type: array
+          items:
+            $ref: "#/components/schemas/Nowcast"
