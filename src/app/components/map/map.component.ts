@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {environment} from "../../../environments/environment";
-import {Coordinates, LocationControllerService, WeatherNowcast} from "../../openapi";
+import {Coordinates, WeatherControllerService, WeatherNowcast} from "../../openapi";
 import mapboxgl from "mapbox-gl";
 import {WeatherService} from "../../service/weather.service";
 
@@ -20,7 +20,7 @@ export class MapComponent implements OnInit, AfterViewInit {
   zoom: number = 5;
   weatherNowcast: WeatherNowcast | undefined;
 
-  constructor(private weatherService: WeatherService, private locationControllerService: LocationControllerService) {
+  constructor(private weatherService: WeatherService, private weatherControllerService: WeatherControllerService) {
   }
 
   ngAfterViewInit(): void {
@@ -131,7 +131,7 @@ export class MapComponent implements OnInit, AfterViewInit {
 
   //sprubowac przeniesc do weather service
   public getRainViewerNowcast(): void {
-    this.locationControllerService.getWeatherNowcast(this.zoom.toString(), this.coordinates).subscribe(
+    this.weatherControllerService.getWeatherNowcast(this.zoom.toString(), this.coordinates).subscribe(
       {
         next: response => {
           this.weatherNowcast = response;

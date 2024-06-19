@@ -9,7 +9,7 @@ paths:
   /weather-nowcast:
     post:
       tags:
-      - location-controller
+      - weather-controller
       operationId: getWeatherNowcast
       parameters:
       - name: mapZoom
@@ -33,7 +33,7 @@ paths:
   /location/coordinates:
     get:
       tags:
-      - location-controller
+      - weather-controller
       operationId: getLocationCoordinates
       parameters:
       - name: city

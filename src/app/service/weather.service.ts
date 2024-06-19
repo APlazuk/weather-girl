@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from "rxjs";
-import {Coordinates, LocationControllerService} from "../openapi";
+import {Coordinates, WeatherControllerService} from "../openapi";
 
 
 @Injectable({
@@ -11,7 +11,7 @@ export class WeatherService {
   private coordinatesSource = new BehaviorSubject<Coordinates>({lng: -74.0060152, lat: 40.7127281});
   currentCoordinates = this.coordinatesSource.asObservable();
 
-  constructor(private locationControllerService: LocationControllerService) {
+  constructor(private weatherControllerService: WeatherControllerService) {
   }
 
   changeCoordinates(coordinates: Coordinates) {
@@ -23,7 +23,7 @@ export class WeatherService {
 
   public getLocationCoordinates(city: string): void {
     let coordinates: Coordinates;
-    this.locationControllerService.getLocationCoordinates(city).subscribe(
+    this.weatherControllerService.getLocationCoordinates(city).subscribe(
       {
         next: response => coordinates = response,
         complete: () => this.changeCoordinates(coordinates),
