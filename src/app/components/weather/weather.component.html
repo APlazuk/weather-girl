@@ -1,10 +1,5 @@
-<p>weather works!</p>
-
-<div><p>Podaj nazwę miasta</p>
-<input type="text" [(ngModel)]="city" (keyup.enter)="onEnter(city)">
-<p>Wartość zmiennej: {{ providedCity }}</p>
-
-<p>lat: {{ coordinates.lat }}</p>
-<p>lon: {{ coordinates.lng }}</p>
+<div id="userEntry" class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <p class="navbar-brand">City name:
+    <input type="text" [(ngModel)]="city" (keyup.enter)="onEnter(city)">
+  </p>
 </div>
-

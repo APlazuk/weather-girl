@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {environment} from "../../../environments/environment";
-import {Coordinates, WeatherControllerService, WeatherNowcast} from "../../openapi";
+import {Coordinates, Instant, Timeseries, WeatherControllerService, WeatherNowcast} from "../../openapi";
 import mapboxgl from "mapbox-gl";
 import {WeatherService} from "../../service/weather.service";
 
@@ -19,6 +19,7 @@ export class MapComponent implements OnInit, AfterViewInit {
   frameOffset: number = 5;
   zoom: number = 5;
   weatherNowcast: WeatherNowcast | undefined;
+  weatherInfo: Instant = {};
 
   constructor(private weatherService: WeatherService, private weatherControllerService: WeatherControllerService) {
   }
@@ -29,6 +30,7 @@ export class MapComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.updateCoordinates();
+    this.updateWeatherInfo();
   }
 
   updateCoordinates() {
@@ -36,16 +38,22 @@ export class MapComponent implements OnInit, AfterViewInit {
       .subscribe(coordinate => {
         this.coordinates = coordinate
         this.getRainViewerNowcast()
+        this.weatherService.getWeatherInfo(coordinate)
         this.updateMapCenter();
         this.updateMapSourceCoordinatesAndUrlPath();
       });
     console.log(this.coordinates);
   }
 
-  //based on api and github examples https://www.rainviewer.com/api/examples.html
-  //and tutorials:
-  // https://medium.com/@gisjohnecs/creating-a-simple-mapbox-component-in-angular-b25aeec706c
-  // https://docs.mapbox.com/mapbox-gl-js/guides/install/
+  updateWeatherInfo() {
+    this.weatherService.currentWeatherInfo
+      .subscribe(weatherInfo => {
+        this.weatherInfo = weatherInfo
+        this.addWeatherInfoPopUp(weatherInfo);
+      });
+    console.log("Weather Info has been updated: " + String(this.weatherInfo));
+  }
+
   public createMap() {
     this.map = new mapboxgl.Map({
       accessToken: environment.mapbox.accessToken,
@@ -54,6 +62,8 @@ export class MapComponent implements OnInit, AfterViewInit {
       center: [this.coordinates.lng as number, this.coordinates.lat as number],
       zoom: this.zoom,
     });
+
+    this.map.addControl(new mapboxgl.NavigationControl());
     console.log(this.weatherNowcast)
     this.addRainViewerLayer();
   }
@@ -89,6 +99,20 @@ export class MapComponent implements OnInit, AfterViewInit {
     })
   }
 
+  addWeatherInfoPopUp(weatherInfo: Instant) {
+    if (weatherInfo.details) {
+      let weatherInfoHtmlTemplate = `<h1>Weather Info</h1>
+              <p>Temperature: ${weatherInfo.details.air_temperature}</p>
+              <p>Humidity: ${weatherInfo.details.relative_humidity}</p>
+              <p>Wind Speed: ${weatherInfo.details.wind_speed}</p>`;
+
+      const popup = new mapboxgl.Popup({closeOnClick: true})
+        .setLngLat([this.coordinates.lng!, this.coordinates.lat!])
+        .setHTML(weatherInfoHtmlTemplate)
+        .addTo(this.map!);
+    }
+  }
+
   updateMapCenter() {
     this.map?.flyTo({
       center: [this.coordinates.lng as number, this.coordinates.lat as number]
@@ -113,7 +137,7 @@ export class MapComponent implements OnInit, AfterViewInit {
     }
   }
 
-  public animateRadar(): void {
+  animateRadar(): void {
     let currentIndex = 0;
     const radarLayers = this.weatherNowcast?.nowcast?.map(nc => 'radar-layer' + nc.time);
     setInterval(() => {
@@ -129,7 +153,6 @@ export class MapComponent implements OnInit, AfterViewInit {
     }, 500);
   }
 
-  //sprubowac przeniesc do weather service
   public getRainViewerNowcast(): void {
     this.weatherControllerService.getWeatherNowcast(this.zoom.toString(), this.coordinates).subscribe(
       {

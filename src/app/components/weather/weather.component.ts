@@ -21,6 +21,7 @@ export class WeatherComponent implements OnInit {
   providedCity = '';
   coordinates: Coordinates = {};
 
+
   constructor(private weatherService: WeatherService) {
   }
 
@@ -36,6 +37,6 @@ export class WeatherComponent implements OnInit {
   updateCoordinates() {
     this.weatherService.currentCoordinates
       .subscribe(coordinate => this.coordinates = coordinate);
-    console.log("Coordinates has been updated:" + this.coordinates.lat?.toString());
+    console.log("Coordinates has been updated:" + this.coordinates.lat?.toString() + ", " + this.coordinates.lng?.toString());
   }
 }
