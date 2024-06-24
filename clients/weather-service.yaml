@@ -3,7 +3,7 @@ info:
   title: OpenAPI definition
   version: v0
 servers:
-- url: http://localhost:8080
+- url: http://weather-production-57a4.up.railway.app
   description: Generated server url
 paths:
   /weather-nowcast:

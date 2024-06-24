@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {environment} from "../../../environments/environment";
-import {Coordinates, Instant, Timeseries, WeatherControllerService, WeatherNowcast} from "../../openapi";
+import {Coordinates, Instant, WeatherControllerService, WeatherNowcast} from "../../openapi";
 import mapboxgl from "mapbox-gl";
 import {WeatherService} from "../../service/weather.service";
 
