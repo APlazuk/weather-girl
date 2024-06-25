@@ -36,7 +36,7 @@ import { Configuration }                                     from '../configurat
 })
 export class WeatherControllerService {
 
-    protected basePath = 'http://zonal-acceptance-production-f33c.up.railway.app';
+    protected basePath = 'https://zonal-acceptance-production-f33c.up.railway.app';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
     public encoder: HttpParameterCodec;
