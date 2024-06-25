@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from "rxjs";
-import {Coordinates, Instant, Timeseries, WeatherControllerService} from "../openapi";
+import {Coordinates, Instant, Timeseries, WeatherControllerService, WeatherNowcast} from "../openapi";
 
 
 @Injectable({
@@ -8,11 +8,15 @@ import {Coordinates, Instant, Timeseries, WeatherControllerService} from "../ope
 })
 export class WeatherService {
 
+  zoom: number = 5;
   private coordinatesSource = new BehaviorSubject<Coordinates>({lng: -74.0060152, lat: 40.7127281});
   currentCoordinates = this.coordinatesSource.asObservable();
 
-  private weatherInfoSource = new BehaviorSubject<Instant>({})
+  private weatherInfoSource = new BehaviorSubject<Instant>({});
   currentWeatherInfo = this.weatherInfoSource.asObservable();
+
+  private weatherNowcastSource = new BehaviorSubject<WeatherNowcast>({});
+  currentWeatherNowcast = this.weatherNowcastSource.asObservable();
 
   constructor(private weatherControllerService: WeatherControllerService) {
   }
@@ -29,6 +33,13 @@ export class WeatherService {
       this.weatherInfoSource.next({details: timeseries.data.instant.details})
       console.log(timeseries.data.instant.details)
     }
+  }
+
+  changeWeatherNowcast(weatherNowcast: WeatherNowcast) {
+    if (weatherNowcast) {
+      this.weatherNowcastSource.next({host: weatherNowcast.host, nowcast: weatherNowcast.nowcast})
+    }
+    console.log("WeatherNowcast has been changed:" + weatherNowcast.host?.toString(), weatherNowcast.nowcast?.toString());
   }
 
   public getLocationCoordinates(city: string): void {
@@ -54,4 +65,17 @@ export class WeatherService {
       }
     );
   }
+
+  public getRainViewerNowcast(coordinates: Coordinates): void {
+    let weatherNowcast: WeatherNowcast;
+    this.weatherControllerService.getWeatherNowcast(this.zoom.toString(), coordinates).subscribe(
+      {
+        next: response => {
+          weatherNowcast = response
+          this.changeWeatherNowcast(weatherNowcast)
+          console.log("Data fetch from backend: " + weatherNowcast.nowcast?.toString())
+        },
+        error: error => console.log(error)
+      })
+  };
 }
