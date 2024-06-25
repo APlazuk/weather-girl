@@ -31,7 +31,7 @@ export class WeatherService {
   changeWeatherInfo(timeseries: Timeseries) {
     if (timeseries.data && timeseries.data.instant) {
       this.weatherInfoSource.next({details: timeseries.data.instant.details})
-      console.log(timeseries.data.instant.details)
+      console.log("WeatherInfo has been changed:" + timeseries.data.instant.details?.air_temperature?.toString())
     }
   }
 
@@ -39,7 +39,7 @@ export class WeatherService {
     if (weatherNowcast) {
       this.weatherNowcastSource.next({host: weatherNowcast.host, nowcast: weatherNowcast.nowcast})
     }
-    console.log("WeatherNowcast has been changed:" + weatherNowcast.host?.toString(), weatherNowcast.nowcast?.toString());
+    console.log("WeatherNowcast has been changed:" + weatherNowcast.host?.toString() +" nowcast: " +  weatherNowcast.nowcast?.toString());
   }
 
   public getLocationCoordinates(city: string): void {

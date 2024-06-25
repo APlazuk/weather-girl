@@ -31,7 +31,6 @@ export class MapComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.updateCoordinates();
     this.updateWeatherInfo();
-    this.updateWeatherNowcast();
   }
 
   updateCoordinates() {
@@ -42,6 +41,7 @@ export class MapComponent implements OnInit, AfterViewInit {
         this.weatherService.getWeatherInfo(coordinate)
         this.updateMapCenter();
         this.updateMapSourceCoordinatesAndUrlPath();
+        this.updateWeatherNowcast();
       });
     console.log(this.coordinates);
   }
@@ -59,6 +59,7 @@ export class MapComponent implements OnInit, AfterViewInit {
     this.weatherService.currentWeatherNowcast
       .subscribe(weatherNowcast => {
         this.weatherNowcast = weatherNowcast
+        console.log("Weather Nowcast has been updated from weather service: " + weatherNowcast.nowcast?.toString());
       });
     console.log("Weather Nowcast has been updated: " + this.weatherNowcast.nowcast?.toString());
   }
