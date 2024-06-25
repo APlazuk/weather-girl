@@ -3,8 +3,13 @@
   command = "npm run build:prod"
   publish = "dist/browser"
 
-
 [[redirects]]
 from = "/*"
 to = "/index.html"
 status = 200
+
+[[redirects]]
+from = "/weather/*"
+to = "http://weather-production-57a4.up.railway.app/weather-nowcast/:splat"
+status = 200
+force = true

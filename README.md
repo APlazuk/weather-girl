@@ -38,4 +38,6 @@ Steps to generate the client code from the provided `weather-service.yaml` file 
 * https://www.rainviewer.com/api/examples.html: https://github.com/rainviewer/rainviewer-api-example; https://github.com/mwasil/Leaflet.Rainviewer;
 * https://medium.com/@gisjohnecs/creating-a-simple-mapbox-component-in-angular-b25aeec706c
 * https://docs.mapbox.com/mapbox-gl-js/guides/install/
+* https://answers.netlify.com/t/angular-environment-ts-and-env-struggles/104797/10
+* https://answers.netlify.com/t/requesting-an-http-resource-from-https-website/8510
 

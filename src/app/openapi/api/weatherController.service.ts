@@ -36,7 +36,7 @@ import { Configuration }                                     from '../configurat
 })
 export class WeatherControllerService {
 
-    protected basePath = 'http://weather-production-57a4.up.railway.app';
+    protected basePath = 'http://zonal-acceptance-production-f33c.up.railway.app';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
     public encoder: HttpParameterCodec;
@@ -151,7 +151,7 @@ export class WeatherControllerService {
             }
         }
 
-        let localVarPath = `/location/coordinates`;
+        let localVarPath = `/weather/location/coordinates`;
         return this.httpClient.request<Coordinates>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -229,7 +229,7 @@ export class WeatherControllerService {
             }
         }
 
-        let localVarPath = `/weather-info`;
+        let localVarPath = `/weather/info`;
         return this.httpClient.request<Timeseries>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -312,7 +312,7 @@ export class WeatherControllerService {
             }
         }
 
-        let localVarPath = `/weather-nowcast`;
+        let localVarPath = `/weather/nowcast`;
         return this.httpClient.request<WeatherNowcast>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
