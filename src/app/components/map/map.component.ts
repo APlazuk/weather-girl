@@ -18,7 +18,7 @@ export class MapComponent implements OnInit, AfterViewInit {
   coordinates: Coordinates = {};
   frameOffset: number = 5;
   zoom: number = 5;
-  weatherNowcast: WeatherNowcast | undefined;
+  weatherNowcast: WeatherNowcast = {};
   weatherInfo: Instant = {};
 
   constructor(private weatherService: WeatherService, private weatherControllerService: WeatherControllerService) {
@@ -31,13 +31,14 @@ export class MapComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.updateCoordinates();
     this.updateWeatherInfo();
+    this.updateWeatherNowcast();
   }
 
   updateCoordinates() {
     this.weatherService.currentCoordinates
       .subscribe(coordinate => {
         this.coordinates = coordinate
-        this.getRainViewerNowcast()
+        this.weatherService.getRainViewerNowcast(coordinate)
         this.weatherService.getWeatherInfo(coordinate)
         this.updateMapCenter();
         this.updateMapSourceCoordinatesAndUrlPath();
@@ -52,6 +53,14 @@ export class MapComponent implements OnInit, AfterViewInit {
         this.addWeatherInfoPopUp(weatherInfo);
       });
     console.log("Weather Info has been updated: " + String(this.weatherInfo));
+  }
+
+  updateWeatherNowcast() {
+    this.weatherService.currentWeatherNowcast
+      .subscribe(weatherNowcast => {
+        this.weatherNowcast = weatherNowcast
+      });
+    console.log("Weather Nowcast has been updated: " + this.weatherNowcast.nowcast?.toString());
   }
 
   public createMap() {
@@ -153,15 +162,4 @@ export class MapComponent implements OnInit, AfterViewInit {
     }, 500);
   }
 
-  public getRainViewerNowcast(): void {
-    this.weatherControllerService.getWeatherNowcast(this.zoom.toString(), this.coordinates).subscribe(
-      {
-        next: response => {
-          this.weatherNowcast = response;
-          this.updateMapSourceCoordinatesAndUrlPath();
-          console.log(this.weatherNowcast)
-        },
-        error: error => console.log(error)
-      })
-  };
 }
